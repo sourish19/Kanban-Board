@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="./src/style.css" />
+    <script
+      src="https://kit.fontawesome.com/ac077fd17e.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+  </head>
+  <body>
+    <div class="p-2 h-screen">
+      <div
+        class="container h-full border-2 border-gray-200 rounded-2xl overflow-y-auto scrollbar-hide"
+      >
+        <div class="nav p-3 text-right">
+          <button
+            class="bg-gray-400 text-white rounded px-3 py-1 font-mono hover:cursor-pointer active:scale-95 transition duration-150"
+          >
+            New Board <span><i class="fa-solid fa-plus"></i></span>
+          </button>
+        </div>
+        <div
+          class="boards-container flex gap-2 p-3 flex-grow overflow-x-auto overflow-y-hidden scrollbar-hide"
+        >
+          <div
+            class="board bg-gray-100 flex flex-col min-w-[400px] rounded-2xl h-full shadow-gray-400"
+          >
+            <div
+              class="board-heading flex justify-between custom-dashed-circle p-3"
+            >
+              <div class="flex justify-start items-center gap-3">
+                <div class="heading font-mono text-xl">PROGRESS</div>
+                <div
+                  class="tasks-number font-mono text-lg rounded-full text-white bg-gray-400 w-6 h-6 flex justify-center items-center"
+                >
+                  2
+                </div>
+              </div>
+              <div class="flex gap-5 justify-center items-center">
+                <i
+                  class="fa-solid fa-pencil cursor-pointer active:scale-95"
+                ></i>
+                <i class="fa-solid fa-trash cursor-pointer active:scale-95"></i>
+              </div>
+            </div>
+            <div class="task-cards-container flex flex-col gap-2 p-3 flex-grow">
+              <div
+                class="card flex flex-col gap-y-2.5 w-[380px] justify-center bg-amber-300 shadow-md shadow-gray-400 rounded p-2 text-base cursor-pointer"
+              >
+                <div class="flex justify-between">
+                  <div class="flex justify-center gap-2.5 items-center">
+                    <i class="fa-regular fa-calendar text-sm"></i>
+                    <div class="text-sm">21 June,2025</div>
+                  </div>
+                  <div>
+                    <i class="fa-solid fa-pencil pr-3 active:scale-90"></i>
+
+                    <i class="fa-solid fa-xmark active:scale-90"></i>
+                  </div>
+                </div>
+                <div class="task-content font-semibold">Lorem</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+.custom-dashed-circle {
+  border: none;
+  border-bottom: 2px dashed #212121; /* Tailwind's amber-800 */
+}
+
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
