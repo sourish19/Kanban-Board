@@ -13,27 +13,32 @@
   </head>
   <body>
     <div class="p-2 h-screen">
+      <!-- container -->
       <div
         class="container h-full border-2 border-gray-200 rounded-2xl overflow-y-auto scrollbar-hide"
       >
+        <!-- Nav Section -->
         <div class="nav p-3 text-right">
           <button
-            class="bg-gray-400 text-white rounded px-3 py-1 font-mono hover:cursor-pointer active:scale-95 transition duration-150"
+            class="bg-gray-400 text-white rounded px-3 py-1 font-mono hover:cursor-pointer active:scale-90 transition duration-150"
           >
-            New Board <span><i class="fa-solid fa-plus"></i></span>
+            New Board <i class="fa-solid fa-plus"></i>
           </button>
         </div>
+        <!-- Boards Container -->
         <div
           class="boards-container flex gap-2 p-3 flex-grow overflow-x-auto overflow-y-hidden scrollbar-hide"
         >
+          <!-- Board 1 -->
           <div
             class="board bg-gray-100 flex flex-col min-w-[400px] rounded-2xl h-full shadow-gray-400"
           >
-            <div
-              class="board-heading flex justify-between custom-dashed-circle p-3"
-            >
+            <!-- Board Heading -->
+            <div class="board-heading flex justify-between p-3">
               <div class="flex justify-start items-center gap-3">
-                <div class="heading font-mono text-xl">PROGRESS</div>
+                <!-- Heading -->
+                <div class="board-heading font-mono text-xl">PROGRESS</div>
+                <!-- Number of Tasks -->
                 <div
                   class="tasks-number font-mono text-lg rounded-full text-white bg-gray-400 w-6 h-6 flex justify-center items-center"
                 >
@@ -42,12 +47,21 @@
               </div>
               <div class="flex gap-5 justify-center items-center">
                 <i
-                  class="fa-solid fa-pencil cursor-pointer active:scale-95"
+                  class="fa-solid fa-pencil cursor-pointer active:scale-90 transition duration-150"
                 ></i>
-                <i class="fa-solid fa-trash cursor-pointer active:scale-95"></i>
+                <i
+                  class="fa-solid fa-trash cursor-pointer active:scale-90 transition duration-150"
+                ></i>
               </div>
             </div>
+            <!--  Description -->
+            <div class="custom-dashed-circle pb-3 pl-3 pr-3 w-100">
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Omnis,
+              corporis! lorem20
+            </div>
+            <!-- Task Card Container -->
             <div class="task-cards-container flex flex-col gap-2 p-3 flex-grow">
+              <!-- Card 1 -->
               <div
                 class="card flex flex-col gap-y-2.5 w-[380px] justify-center bg-amber-300 shadow-md shadow-gray-400 rounded p-2 text-base cursor-pointer"
               >
@@ -57,16 +71,74 @@
                     <div class="text-sm">21 June,2025</div>
                   </div>
                   <div>
-                    <i class="fa-solid fa-pencil pr-3 active:scale-90"></i>
+                    <i
+                      class="fa-solid fa-pencil pr-3 active:scale-90 transition duration-150"
+                    ></i>
 
-                    <i class="fa-solid fa-xmark active:scale-90"></i>
+                    <i
+                      class="fa-solid fa-xmark active:scale-90 transition duration-150"
+                    ></i>
                   </div>
                 </div>
                 <div class="task-content font-semibold">Lorem</div>
               </div>
+              <!-- Add Item Card -->
+              <div
+                class="text-center pt-3 pb-3 hover:bg-gray-300 active:scale-90 transition duration-150"
+              >
+                <button class="add-item-bttn cursor-pointer w-full h-full">
+                  Add Item<i class="fa-sharp-duotone fa-solid fa-plus pl-2"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Add New Board -->
+    <div
+      class="modal-new-board hidden rounded-2xl bg-gray-400 h-50 w-100 fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
+    >
+      <div class="text-center font-mono text-2xl p-3 underline">
+        Add New Board
+      </div>
+      <div class="text-center p-3">
+        <input
+          type="text"
+          placeholder="Board Name..."
+          class="bg-amber-50 w-80 h-9 border-2 rounded"
+        />
+      </div>
+      <div class="addBttn text-center py-5">
+        <button
+          class="py-2 px-6 bg-gray-800 text-white rounded-xl cursor-pointer active:scale-90"
+        >
+          Add
+        </button>
+      </div>
+    </div>
+
+    <!-- Add New Item -->
+    <div
+      class="modal-new-task hidden rounded-2xl bg-gray-400 h-50 w-100 fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
+    >
+      <div class="text-center font-mono text-2xl p-3 underline">
+        Add New Task
+      </div>
+      <div class="text-center p-3">
+        <input
+          type="text"
+          placeholder="Task Name..."
+          class="bg-amber-50 w-80 h-9 border-2 rounded"
+        />
+      </div>
+      <div class="addBttn text-center py-5">
+        <button
+          class="py-2 px-6 bg-gray-800 text-white rounded-xl cursor-pointer active:scale-90 font-mono"
+        >
+          Add
+        </button>
       </div>
     </div>
 
