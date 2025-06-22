@@ -15,30 +15,30 @@
     <div class="p-2 h-screen">
       <!-- container -->
       <div
-        class="container h-full border-2 border-gray-200 rounded-2xl overflow-y-auto scrollbar-hide"
+        class="container h-full border-2 border-gray-200 rounded-2xl overflow-y-auto scrollbar-hide bg-gradient-to-b from-[#8d8daa] via-[#dfdfde] to-[#f7f5f2]"
       >
         <!-- Nav Section -->
-        <div class="nav p-3 text-right">
+        <div class="nav p-3 text-right custom-dashed-circle">
           <button
-            class="bg-gray-400 text-white rounded px-3 py-1 font-mono hover:cursor-pointer active:scale-90 transition duration-150"
+            class="new-board-button bg-gray-600 text-white rounded px-3 py-1 font-mono hover:cursor-pointer active:scale-90 transition duration-150"
           >
             New Board <i class="fa-solid fa-plus"></i>
           </button>
         </div>
         <!-- Boards Container -->
         <div
-          class="boards-container flex gap-2 p-3 flex-grow overflow-x-auto overflow-y-hidden scrollbar-hide"
+          class="boards-container flex gap-2 p-3 flex-grow overflow-x-auto overflow-y-hidden"
         >
           <!-- Board 1 -->
-          <div
+          <!-- <div
             class="board bg-gray-100 flex flex-col min-w-[400px] rounded-2xl h-full shadow-gray-400"
           >
-            <!-- Board Heading -->
+            
             <div class="board-heading flex justify-between p-3">
               <div class="flex justify-start items-center gap-3">
-                <!-- Heading -->
+                
                 <div class="board-heading font-mono text-xl">PROGRESS</div>
-                <!-- Number of Tasks -->
+                
                 <div
                   class="tasks-number font-mono text-lg rounded-full text-white bg-gray-400 w-6 h-6 flex justify-center items-center"
                 >
@@ -54,14 +54,14 @@
                 ></i>
               </div>
             </div>
-            <!--  Description -->
+            
             <div class="custom-dashed-circle pb-3 pl-3 pr-3 w-100">
               Lorem ipsum, dolor sit amet consectetur adipisicing elit. Omnis,
               corporis! lorem20
             </div>
-            <!-- Task Card Container -->
+            
             <div class="task-cards-container flex flex-col gap-2 p-3 flex-grow">
-              <!-- Card 1 -->
+              
               <div
                 class="card flex flex-col gap-y-2.5 w-[380px] justify-center bg-amber-300 shadow-md shadow-gray-400 rounded p-2 text-base cursor-pointer"
               >
@@ -82,23 +82,25 @@
                 </div>
                 <div class="task-content font-semibold">Lorem</div>
               </div>
-              <!-- Add Item Card -->
+              
               <div
                 class="text-center pt-3 pb-3 hover:bg-gray-300 active:scale-90 transition duration-150"
               >
-                <button class="add-item-bttn cursor-pointer w-full h-full">
+                <button
+                  class="add-item-bttn cursor-pointer w-full h-full font-mono text-xl"
+                >
                   Add Item<i class="fa-sharp-duotone fa-solid fa-plus pl-2"></i>
                 </button>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
 
     <!-- Add New Board -->
     <div
-      class="modal-new-board hidden rounded-2xl bg-gray-400 h-50 w-100 fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
+      class="modal-new-board hidden rounded-2xl bg-gray-400 h-60 w-100 fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
     >
       <div class="text-center font-mono text-2xl p-3 underline">
         Add New Board
@@ -107,10 +109,17 @@
         <input
           type="text"
           placeholder="Board Name..."
-          class="bg-amber-50 w-80 h-9 border-2 rounded"
+          class="input-board-name bg-amber-50 w-80 h-9 border-2 rounded"
         />
       </div>
-      <div class="addBttn text-center py-5">
+      <div class="text-center p-3">
+        <input
+          type="text"
+          placeholder="Board Desc..."
+          class="input-board-desc bg-amber-50 w-80 h-9 border-2 rounded"
+        />
+      </div>
+      <div class="new-add-bttn text-center py-5">
         <button
           class="py-2 px-6 bg-gray-800 text-white rounded-xl cursor-pointer active:scale-90"
         >
@@ -121,7 +130,7 @@
 
     <!-- Add New Item -->
     <div
-      class="modal-new-task hidden rounded-2xl bg-gray-400 h-50 w-100 fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
+      class="modal-new-task hidden rounded-2xl bg-gray-400 h-60 w-100 fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
     >
       <div class="text-center font-mono text-2xl p-3 underline">
         Add New Task
@@ -130,10 +139,24 @@
         <input
           type="text"
           placeholder="Task Name..."
-          class="bg-amber-50 w-80 h-9 border-2 rounded"
+          class="taskCard_content bg-amber-50 w-80 h-9 border-2 rounded"
         />
+        <div class="select-colors pt-3 font-mono text-xl">
+          Choose Colors:
+          <select
+            class="bg-white p-1 rounded"
+            name="colors"
+            id="taskCard_colors"
+          >
+            <option value="amber">amber</option>
+            <option value="blue">blue</option>
+            <option value="red">red</option>
+            <option value="indigo">indigo</option>
+            <option value="green">green</option>
+          </select>
+        </div>
       </div>
-      <div class="addBttn text-center py-5">
+      <div class="add-taskcard-bttn text-center py-3">
         <button
           class="py-2 px-6 bg-gray-800 text-white rounded-xl cursor-pointer active:scale-90 font-mono"
         >
