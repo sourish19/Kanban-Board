@@ -14,9 +14,22 @@ const SELECTORS = {
   taskCard_color: "#taskCard_colors",
   taskCard_content: ".taskCard_content",
   task_counter: ".tasks-number",
-  delete_board_bttn: "delete-board-bttn",
   add_item_bttn: "add-item-bttn",
+  delete_board_bttn: "delete-board-bttn",
   delete_card_bttn: "delete-card-bttn",
+  edit_board_bttn: "edit-board-bttn",
+  board_heading: ".board-heading",
+  board_desc: ".board-desc",
+  modal_Edit_Board: ".modal-edit-board",
+  input_Edit_Name: ".input-edit-name",
+  input_Edit_Desc: ".input-edit-desc",
+  add_Edit_Bttn: ".edit-add-bttn",
+  modal_Edit_Task: ".modal-edit-task",
+  modal_Edit_Task_Name: ".modal-edit-task-name",
+  modal_Edit_TaskCard_Colors: "#modal-edit-taskCard-colors",
+  modal_Task_AddBttn: ".modal-task-addBttn",
+  edit_card_bttn: "edit-card-bttn",
+  task_content: ".task-content",
 };
 
 // DECLARE CONST VARIABLES
@@ -31,22 +44,43 @@ const modalBoard_Input_BoardDes = document.querySelector(
 const createBoard_addbttn = document.querySelector(SELECTORS.create_add_bttn);
 const boards_Container = document.querySelector(SELECTORS.boards_container);
 const modalTaskCard = document.querySelector(SELECTORS.modal_new_task);
-const modalAdd_TaskCard_bttn = document.querySelector(
+const modalAdd_taskCard_bttn = document.querySelector(
   SELECTORS.modalAdd_taskCard_bttn
 );
 const taskCard_color = document.querySelector(SELECTORS.taskCard_color);
 const taskCard_content = document.querySelector(SELECTORS.taskCard_content);
+const modal_edit_board = document.querySelector(SELECTORS.modal_Edit_Board);
+const modal_editBoard_inputName = document.querySelector(
+  SELECTORS.input_Edit_Name
+);
+const modal_editBoard_inputDesc = document.querySelector(
+  SELECTORS.input_Edit_Desc
+);
+const modal_editBoard_addBttn = document.querySelector(SELECTORS.add_Edit_Bttn);
+const modal_editTask_AddBttn = document.querySelector(
+  SELECTORS.modal_Task_AddBttn
+);
+const modal_edit_Task = document.querySelector(SELECTORS.modal_Edit_Task);
+const modal_Edit_Task_Name = document.querySelector(
+  SELECTORS.modal_Edit_Task_Name
+);
+const modal_Edit_TaskCard_Colors = document.querySelector(
+  SELECTORS.modal_Edit_TaskCard_Colors
+);
 
 // DECLARE LET VARIABLES
 let modalpopup_flag = false;
 let taskContainer = "";
 let task_counter = null;
+let temp_element = null;
 
 // EVENT LISTNERS
 createBoard_bttn.addEventListener("click", newBoardFn);
 createBoard_addbttn.addEventListener("click", addNewBoard);
 boards_Container.addEventListener("click", getRequiredElementFn);
-modalAdd_TaskCard_bttn.addEventListener("click", getValuesForNewTaskFn);
+modalAdd_taskCard_bttn.addEventListener("click", getValuesForNewTaskFn);
+modal_editBoard_addBttn.addEventListener("click", editBoardFn);
+modal_editTask_AddBttn.addEventListener("click", editTaskFn);
 
 // FUNCTIONS
 function newBoardFn() {
@@ -81,10 +115,14 @@ function getRequiredElementFn(e) {
   const delete_taskCard = element.classList.contains(
     SELECTORS.delete_card_bttn
   );
+  const edit_board = element.classList.contains(SELECTORS.edit_board_bttn);
+  const edit_task = element.classList.contains(SELECTORS.edit_card_bttn);
 
   if (add) newTaskCardsFn(element);
-  if (delete_Board) deleteBoard(element);
-  if (delete_taskCard) deleteBoard(element);
+  if (delete_Board) deleteFn(element);
+  if (delete_taskCard) deleteFn(element);
+  if (edit_board) editModalFn(element);
+  if (edit_task) editModalFn(element);
 
   return;
 }
@@ -94,7 +132,7 @@ function createNewBoardFn(board_name, board_desc) {
 <div
   class="board bg-gray-100 flex flex-col min-w-[400px] rounded-2xl h-full shadow-gray-400"
 >
-  <div class="board-heading flex justify-between p-3">
+  <div class="flex justify-between p-3">
     <div class="flex justify-start items-center gap-3">
       <div class="board-heading font-mono text-xl">${board_name}</div>
 
@@ -106,7 +144,7 @@ function createNewBoardFn(board_name, board_desc) {
     </div>
     <div class="flex gap-5 justify-center items-center">
       <i
-        class="fa-solid fa-pencil cursor-pointer active:scale-90 transition duration-150"
+        class="edit-board-bttn fa-solid fa-pencil cursor-pointer active:scale-90 transition duration-150"
       ></i>
       <i
         class="delete-board-bttn fa-solid fa-trash cursor-pointer active:scale-90 transition duration-150"
@@ -114,7 +152,7 @@ function createNewBoardFn(board_name, board_desc) {
     </div>
   </div>
 
-  <div class="custom-dashed-circle pb-3 pl-3 pr-3 w-100">${board_desc}</div>
+  <div class="board-desc custom-dashed-circle pb-3 pl-3 pr-3 w-100">${board_desc}</div>
 
   <div class="task-cards-container flex flex-col gap-2 p-3 flex-grow"></div>
   <div
@@ -181,7 +219,7 @@ function addNewTaskFn(date, color, content) {
       </div>
       <div>
         <i
-          class="fa-solid fa-pencil pr-3 active:scale-90 transition duration-150"
+          class="edit-card-bttn fa-solid fa-pencil pr-3 active:scale-90 transition duration-150"
         ></i>
 
         <i
@@ -197,7 +235,7 @@ function addNewTaskFn(date, color, content) {
   return;
 }
 
-function deleteBoard(element) {
+function deleteFn(element) {
   if (modalpopup_flag) return;
 
   if (element.classList.contains(SELECTORS.delete_board_bttn)) {
@@ -212,5 +250,83 @@ function deleteBoard(element) {
     taskCard_container.remove();
     task_counter.innerHTML = Number(task_counter.innerHTML) - 1;
   }
+  return;
+}
+
+function editModalFn(element) {
+  if (modalpopup_flag) return;
+
+  if (element.classList.contains(SELECTORS.edit_board_bttn)) {
+    modalpopup_flag = true;
+    modal_edit_board.classList.toggle("hidden", false);
+    temp_element = element;
+  }
+  if (element.classList.contains(SELECTORS.edit_card_bttn)) {
+    modalpopup_flag = true;
+    modal_edit_Task.classList.toggle("hidden", false);
+    temp_element = element;
+  }
+
+  return;
+}
+
+function editBoardFn() {
+  const edit_boardName = modal_editBoard_inputName.value.trim().toUpperCase();
+  const edit_boardDesc = modal_editBoard_inputDesc.value.trim();
+  const board = temp_element.closest(SELECTORS.board);
+  const board_heading = board.querySelector(SELECTORS.board_heading);
+  const board_desc = board.querySelector(SELECTORS.board_desc);
+
+  temp_element = null;
+
+  if (!edit_boardName || !edit_boardDesc) {
+    alert("Please provide the required field");
+    return;
+  }
+
+  board_heading.textContent = edit_boardName;
+  board_desc.textContent = edit_boardDesc;
+
+  modalpopup_flag = false;
+  modal_edit_board.classList.toggle("hidden", true);
+
+  return;
+}
+
+function editTaskFn() {
+  const edit_taskName = modal_Edit_Task_Name.value.trim();
+  const edit_taskColor = modal_Edit_TaskCard_Colors.value;
+  const taskCard = temp_element.closest(SELECTORS.task_card);
+  const taskCard_content = taskCard.querySelector(SELECTORS.task_content);
+  temp_element = null;
+
+  if (!edit_taskName) {
+    alert("Please provide the required field");
+    return;
+  }
+
+  const colorArray = [
+    { name: "amber", class: "bg-amber-300" },
+    { name: "blue", class: "bg-blue-300" },
+    { name: "red", class: "bg-red-300" },
+    { name: "indigo", class: "bg-indigo-300" },
+    { name: "green", class: "bg-green-300" },
+  ];
+  const color = colorArray.filter((e) => {
+    if (e.name === edit_taskColor) return e;
+  });
+
+  colorArray.find((e) => {
+    if (taskCard.classList.contains(e.class)) {
+      taskCard.classList.remove(e.class);
+    }
+  });
+
+  taskCard_content.textContent = edit_taskName;
+  taskCard.classList.add(color[0].class);
+
+  modalpopup_flag = false;
+  modal_edit_Task.classList.toggle("hidden", true);
+
   return;
 }

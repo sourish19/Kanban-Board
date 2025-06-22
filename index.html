@@ -29,71 +29,7 @@
         <div
           class="boards-container flex gap-2 p-3 flex-grow overflow-x-auto overflow-y-hidden"
         >
-          <!-- Board 1 -->
-          <!-- <div
-            class="board bg-gray-100 flex flex-col min-w-[400px] rounded-2xl h-full shadow-gray-400"
-          >
-            
-            <div class="board-heading flex justify-between p-3">
-              <div class="flex justify-start items-center gap-3">
-                
-                <div class="board-heading font-mono text-xl">PROGRESS</div>
-                
-                <div
-                  class="tasks-number font-mono text-lg rounded-full text-white bg-gray-400 w-6 h-6 flex justify-center items-center"
-                >
-                  2
-                </div>
-              </div>
-              <div class="flex gap-5 justify-center items-center">
-                <i
-                  class="fa-solid fa-pencil cursor-pointer active:scale-90 transition duration-150"
-                ></i>
-                <i
-                  class="fa-solid fa-trash cursor-pointer active:scale-90 transition duration-150"
-                ></i>
-              </div>
-            </div>
-            
-            <div class="custom-dashed-circle pb-3 pl-3 pr-3 w-100">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Omnis,
-              corporis! lorem20
-            </div>
-            
-            <div class="task-cards-container flex flex-col gap-2 p-3 flex-grow">
-              
-              <div
-                class="card flex flex-col gap-y-2.5 w-[380px] justify-center bg-amber-300 shadow-md shadow-gray-400 rounded p-2 text-base cursor-pointer"
-              >
-                <div class="flex justify-between">
-                  <div class="flex justify-center gap-2.5 items-center">
-                    <i class="fa-regular fa-calendar text-sm"></i>
-                    <div class="text-sm">21 June,2025</div>
-                  </div>
-                  <div>
-                    <i
-                      class="fa-solid fa-pencil pr-3 active:scale-90 transition duration-150"
-                    ></i>
-
-                    <i
-                      class="fa-solid fa-xmark active:scale-90 transition duration-150"
-                    ></i>
-                  </div>
-                </div>
-                <div class="task-content font-semibold">Lorem</div>
-              </div>
-              
-              <div
-                class="text-center pt-3 pb-3 hover:bg-gray-300 active:scale-90 transition duration-150"
-              >
-                <button
-                  class="add-item-bttn cursor-pointer w-full h-full font-mono text-xl"
-                >
-                  Add Item<i class="fa-sharp-duotone fa-solid fa-plus pl-2"></i>
-                </button>
-              </div>
-            </div>
-          </div> -->
+          <!-- Boards will be added here -->
         </div>
       </div>
     </div>
@@ -161,6 +97,69 @@
           class="py-2 px-6 bg-gray-800 text-white rounded-xl cursor-pointer active:scale-90 font-mono"
         >
           Add
+        </button>
+      </div>
+    </div>
+
+    <!-- Edit Board -->
+    <div
+      class="modal-edit-board hidden rounded-2xl bg-gray-400 h-60 w-100 fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
+    >
+      <div class="text-center font-mono text-2xl p-3 underline">Edit Board</div>
+      <div class="text-center p-3">
+        <input
+          type="text"
+          placeholder="Board Name..."
+          class="input-edit-name bg-amber-50 w-80 h-9 border-2 rounded"
+        />
+      </div>
+      <div class="text-center p-3">
+        <input
+          type="text"
+          placeholder="Board Description..."
+          class="input-edit-desc bg-amber-50 w-80 h-9 border-2 rounded"
+        />
+      </div>
+      <div class="edit-add-bttn text-center py-5">
+        <button
+          class="py-2 px-6 bg-gray-800 text-white rounded-xl cursor-pointer active:scale-90"
+        >
+          Add
+        </button>
+      </div>
+    </div>
+
+    <!-- Edit Card -->
+    <div
+      class="modal-edit-task hidden rounded-2xl bg-gray-400 h-60 w-100 fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
+    >
+      <div class="text-center font-mono text-2xl p-3 underline">Edit Task</div>
+      <div class="text-center p-3">
+        <input
+          type="text"
+          placeholder="Task Name..."
+          class="modal-edit-task-name bg-amber-50 w-80 h-9 border-2 rounded"
+        />
+        <div class="select-colors pt-3 font-mono text-xl">
+          Choose Colors:
+          <select
+            class="bg-white p-1 rounded"
+            name="colors"
+            id="modal-edit-taskCard-colors"
+          >
+            <option value="amber">amber</option>
+            <option value="blue">blue</option>
+            <option value="red">red</option>
+            <option value="indigo">indigo</option>
+            <option value="green">green</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-task-addBttn text-center py-3">
+        <button
+          class="py-2 px-6 bg-gray-800 text-white rounded-xl cursor-pointer active:scale-90 font-mono"
+        >
+          Edit
         </button>
       </div>
     </div>
