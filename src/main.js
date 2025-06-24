@@ -67,6 +67,7 @@ const modal_Edit_Task_Name = document.querySelector(
 const modal_Edit_TaskCard_Colors = document.querySelector(
   SELECTORS.modal_Edit_TaskCard_Colors
 );
+const allTasks = document.querySelectorAll(SELECTORS.task_card);
 
 // DECLARE LET VARIABLES
 let modalpopup_flag = false;
@@ -128,45 +129,51 @@ function getRequiredElementFn(e) {
 }
 
 function createNewBoardFn(board_name, board_desc) {
-  const board = `
-<div
-  class="board bg-gray-100 flex flex-col min-w-[400px] rounded-2xl h-full shadow-gray-400"
->
-  <div class="flex justify-between p-3">
-    <div class="flex justify-start items-center gap-3">
-      <div class="board-heading font-mono text-xl">${board_name}</div>
+  const div = document.createElement("div");
+  div.className =
+    "board bg-gray-100 flex flex-col min-w-[400px] rounded-2xl h-full shadow-gray-400";
 
-      <div
-        class="tasks-number font-mono text-lg rounded-full text-white bg-gray-400 w-6 h-6 flex justify-center items-center"
-      >
-        0
-      </div>
-    </div>
-    <div class="flex gap-5 justify-center items-center">
-      <i
-        class="edit-board-bttn fa-solid fa-pencil cursor-pointer active:scale-90 transition duration-150"
-      ></i>
-      <i
-        class="delete-board-bttn fa-solid fa-trash cursor-pointer active:scale-90 transition duration-150"
-      ></i>
+  div.innerHTML = `
+<div class="flex justify-between p-3">
+  <div class="flex justify-start items-center gap-3">
+    <div class="board-heading font-mono text-xl">${board_name}</div>
+
+    <div
+      class="tasks-number font-mono text-lg rounded-full text-white bg-gray-400 w-6 h-6 flex justify-center items-center"
+    >
+      0
     </div>
   </div>
-
-  <div class="board-desc custom-dashed-circle pb-3 pl-3 pr-3 w-100">${board_desc}</div>
-
-  <div class="task-cards-container flex flex-col gap-2 p-3 flex-grow"></div>
-  <div
-    class="text-center pt-3 pb-3 hover:bg-gray-300 active:scale-90 transition duration-150"
-  >
-    <button
-      class="add-item-bttn cursor-pointer w-full h-full font-mono text-xl"
-    >
-      Add Item<i class="fa-sharp-duotone fa-solid fa-plus pl-2"></i>
-    </button>
+  <div class="flex gap-5 justify-center items-center">
+    <i
+      class="edit-board-bttn fa-solid fa-pencil cursor-pointer active:scale-90 transition duration-150"
+    ></i>
+    <i
+      class="delete-board-bttn fa-solid fa-trash cursor-pointer active:scale-90 transition duration-150"
+    ></i>
   </div>
 </div>
+
+<div class="board-desc custom-dashed-circle pb-3 pl-3 pr-3 w-100">
+  ${board_desc}
+</div>
+
+<div class="task-cards-container flex flex-col gap-2 p-3 flex-grow"></div>
+<div
+  class="text-center pt-3 pb-3 hover:bg-gray-300 active:scale-90 transition duration-150"
+>
+  <button class="add-item-bttn cursor-pointer w-full h-full font-mono text-xl">
+    Add Item<i class="fa-sharp-duotone fa-solid fa-plus pl-2"></i>
+  </button>
+</div>
   `;
-  boards_Container.innerHTML += board;
+
+  const event_taskContainer = div.querySelector(SELECTORS.task_container);
+
+  handleDragDropFn(event_taskContainer);
+
+  boards_Container.appendChild(div);
+
   return;
 }
 
@@ -205,13 +212,13 @@ function addNewTaskFn(date, color, content) {
     indigo: "bg-indigo-300",
     green: "bg-green-300",
   };
+  const task_card = document.createElement("div");
+  task_card.className = `task-card flex flex-col gap-y-2.5 w-[380px] justify-center ${
+    colorMap[color] || "bg - gray - 300"
+  } shadow-md shadow-gray-400 rounded p-2 text-base cursor-pointer `;
+  task_card.setAttribute("draggable", "true");
 
-  const task_card = `
-  <div
-  class="task-card flex flex-col gap-y-2.5 w-[380px] justify-center ${
-    colorMap[color] || "bg-gray-300"
-  } shadow-md shadow-gray-400 rounded p-2 text-base cursor-pointer"
-  >
+  task_card.innerHTML = `
     <div class="flex justify-between">
       <div class="flex justify-center gap-2.5 items-center">
         <i class="fa-regular fa-calendar text-sm"></i>
@@ -228,10 +235,13 @@ function addNewTaskFn(date, color, content) {
       </div>
     </div>
     <div class="task-content font-semibold">${content}</div>
-  </div>
   `;
+
+  handleDragDropFn(task_card);
+
   task_counter.innerHTML = Number(task_counter.innerHTML) + 1;
-  taskContainer.innerHTML += task_card;
+  taskContainer.appendChild(task_card);
+
   return;
 }
 
@@ -329,4 +339,29 @@ function editTaskFn() {
   modal_edit_Task.classList.toggle("hidden", true);
 
   return;
+}
+
+function handleDragDropFn(target) {
+  if (target.classList.contains("task-card")) {
+    target.addEventListener("dragstart", (e) => {
+      target.classList.add("dragging");
+    });
+
+    target.addEventListener("dragend", (e) => {
+      console.log("parent element", target.closest(SELECTORS.board));
+
+      target.classList.remove("dragging");
+    });
+  } else if (target.classList.contains("task-cards-container")) {
+    target.addEventListener("dragover", (e) => {
+      e.preventDefault();
+    });
+    target.addEventListener("drop", (e) => {
+      e.preventDefault();
+      const element = document.querySelector(".dragging");
+      console.log("parent container", target.closest(SELECTORS.board));
+
+      target.append(element);
+    });
+  }
 }
