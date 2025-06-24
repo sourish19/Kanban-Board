@@ -75,6 +75,8 @@ let taskContainer = "";
 let task_counter = null;
 let temp_element = null;
 
+let state = [];
+
 // EVENT LISTNERS
 createBoard_bttn.addEventListener("click", newBoardFn);
 createBoard_addbttn.addEventListener("click", addNewBoard);
@@ -83,7 +85,44 @@ modalAdd_taskCard_bttn.addEventListener("click", getValuesForNewTaskFn);
 modal_editBoard_addBttn.addEventListener("click", editBoardFn);
 modal_editTask_AddBttn.addEventListener("click", editTaskFn);
 
+// CLASS CONSTRUCTOR FOR LOCAL STORAGE
+class Board {
+  constructor(boardId, boardName, boardDesc, boardTaskCount) {
+    this.boardId = boardId;
+    this.boardName = boardName;
+    this.boardDesc = boardDesc;
+    this.boardTaskCount = boardTaskCount;
+    this.tasks = [];
+  }
+}
+
+class Task {
+  constructor(taskId, taskName, taskDate, taskCardColor) {
+    this.taskId = taskId;
+    this.taskName = taskName;
+    this.taskDate = taskDate;
+    this.taskCardColor = taskCardColor;
+  }
+}
+
 // FUNCTIONS
+
+(function getItemLocalFn() {
+  let vals = localStorage.getItem("kanban");
+  if (!vals) return;
+  vals = JSON.parse(vals);
+  vals.forEach((e) => {
+    createNewBoardFn(e.boardName, e.boardDesc, e.boardId);
+    if (e.tasks.length) {
+      e.tasks.forEach((t) => {
+        console.log(t.taskDate, t.taskCardColor, t.taskName, t.taskId);
+
+        addNewTaskFn(t.taskDate, t.taskCardColor, t.taskName, t.taskId);
+      });
+    }
+  });
+})();
+
 function newBoardFn() {
   if (modalpopup_flag) return;
   modalpopup_flag = true;
@@ -128,10 +167,17 @@ function getRequiredElementFn(e) {
   return;
 }
 
-function createNewBoardFn(board_name, board_desc) {
+function createNewBoardFn(
+  board_name,
+  board_desc,
+  boardId = null,
+  boardTaskCount = 0
+) {
+  const board_id = boardId ?? generateRandomNumberFn();
   const div = document.createElement("div");
   div.className =
     "board bg-gray-100 flex flex-col min-w-[400px] rounded-2xl h-full shadow-gray-400";
+  div.id = `${board_id}`;
 
   div.innerHTML = `
 <div class="flex justify-between p-3">
@@ -141,7 +187,7 @@ function createNewBoardFn(board_name, board_desc) {
     <div
       class="tasks-number font-mono text-lg rounded-full text-white bg-gray-400 w-6 h-6 flex justify-center items-center"
     >
-      0
+      ${boardTaskCount}
     </div>
   </div>
   <div class="flex gap-5 justify-center items-center">
@@ -174,6 +220,12 @@ function createNewBoardFn(board_name, board_desc) {
 
   boards_Container.appendChild(div);
 
+  const board_obj = new Board(div.id, board_name, board_desc, 0);
+  state.push(board_obj);
+  console.log(state);
+
+  setItemInLocalFn();
+
   return;
 }
 
@@ -194,17 +246,22 @@ function getValuesForNewTaskFn() {
   })},${date.getFullYear()}`;
   const task_color = taskCard_color.value;
   const task_content = taskCard_content.value;
+
   if (!task_content) {
     alert("Please provide Task Name");
     return;
   }
+
   modalTaskCard.classList.toggle("hidden", true);
   modalpopup_flag = false;
+
   addNewTaskFn(currDate, task_color, task_content);
+
   return;
 }
 
-function addNewTaskFn(date, color, content) {
+function addNewTaskFn(date, color, content, taskId = null) {
+  const task_id = taskId ?? generateRandomNumberFn();
   const colorMap = {
     amber: "bg-amber-300",
     blue: "bg-blue-300",
@@ -217,6 +274,7 @@ function addNewTaskFn(date, color, content) {
     colorMap[color] || "bg - gray - 300"
   } shadow-md shadow-gray-400 rounded p-2 text-base cursor-pointer `;
   task_card.setAttribute("draggable", "true");
+  task_card.id = `${task_id}`;
 
   task_card.innerHTML = `
     <div class="flex justify-between">
@@ -241,6 +299,17 @@ function addNewTaskFn(date, color, content) {
 
   task_counter.innerHTML = Number(task_counter.innerHTML) + 1;
   taskContainer.appendChild(task_card);
+  const tempBoardId = taskContainer.closest(SELECTORS.board).id;
+
+  const task_obj = new Task(task_card.id, content, date, colorMap[color]);
+  state.forEach((obj) => {
+    if (obj.boardId === tempBoardId) {
+      obj.tasks.push(task_obj);
+      obj.boardTaskCount += 1;
+    }
+  });
+
+  setItemInLocalFn();
 
   return;
 }
@@ -250,6 +319,7 @@ function deleteFn(element) {
 
   if (element.classList.contains(SELECTORS.delete_board_bttn)) {
     const board_container = element.closest(SELECTORS.board);
+    // handleDeleteFn(board_container.id);
     board_container.remove();
   }
   if (element.classList.contains(SELECTORS.delete_card_bttn)) {
@@ -287,8 +357,6 @@ function editBoardFn() {
   const board_heading = board.querySelector(SELECTORS.board_heading);
   const board_desc = board.querySelector(SELECTORS.board_desc);
 
-  temp_element = null;
-
   if (!edit_boardName || !edit_boardDesc) {
     alert("Please provide the required field");
     return;
@@ -299,6 +367,9 @@ function editBoardFn() {
 
   modalpopup_flag = false;
   modal_edit_board.classList.toggle("hidden", true);
+  temp_element = null;
+
+  handleEditBoardForLocalStorageFn(board.id, edit_boardName, edit_boardDesc);
 
   return;
 }
@@ -308,7 +379,8 @@ function editTaskFn() {
   const edit_taskColor = modal_Edit_TaskCard_Colors.value;
   const taskCard = temp_element.closest(SELECTORS.task_card);
   const taskCard_content = taskCard.querySelector(SELECTORS.task_content);
-  temp_element = null;
+  const boardId = temp_element.closest(SELECTORS.board).id;
+  const taskId = taskCard.id;
 
   if (!edit_taskName) {
     alert("Please provide the required field");
@@ -326,7 +398,7 @@ function editTaskFn() {
     if (e.name === edit_taskColor) return e;
   });
 
-  colorArray.find((e) => {
+  colorArray.forEach((e) => {
     if (taskCard.classList.contains(e.class)) {
       taskCard.classList.remove(e.class);
     }
@@ -338,6 +410,15 @@ function editTaskFn() {
   modalpopup_flag = false;
   modal_edit_Task.classList.toggle("hidden", true);
 
+  handlelEditTaskForLocalStorageFn(
+    boardId,
+    taskId,
+    edit_taskName,
+    color[0].class
+  );
+
+  temp_element = null;
+
   return;
 }
 
@@ -345,11 +426,12 @@ function handleDragDropFn(target) {
   if (target.classList.contains("task-card")) {
     target.addEventListener("dragstart", (e) => {
       target.classList.add("dragging");
+      const board = target.closest(SELECTORS.board);
+
+      task_counter = board.querySelector(SELECTORS.task_counter);
     });
 
     target.addEventListener("dragend", (e) => {
-      console.log("parent element", target.closest(SELECTORS.board));
-
       target.classList.remove("dragging");
     });
   } else if (target.classList.contains("task-cards-container")) {
@@ -359,9 +441,62 @@ function handleDragDropFn(target) {
     target.addEventListener("drop", (e) => {
       e.preventDefault();
       const element = document.querySelector(".dragging");
-      console.log("parent container", target.closest(SELECTORS.board));
+      const board = target.closest(SELECTORS.board);
+      const new_taskCounter = board.querySelector(SELECTORS.task_counter);
 
       target.append(element);
+
+      new_taskCounter.textContent = Number(new_taskCounter.textContent) + 1;
+      task_counter.textContent = Number(task_counter.textContent) - 1;
+      task_counter = null;
     });
   }
+}
+
+function handlelEditTaskForLocalStorageFn(
+  boardId,
+  taskId,
+  taskName,
+  taskColor
+) {
+  const obj = state.find((e) => {
+    if (e.boardId == boardId) {
+      return e;
+    }
+  });
+
+  obj.tasks.forEach((e) => {
+    if (e.taskId === taskId) {
+      e.taskName = taskName;
+      e.taskCardColor = taskColor;
+    }
+  });
+
+  setItemInLocalFn();
+}
+
+function handleEditBoardForLocalStorageFn(boardId, boardName, boardDesc) {
+  const obj = state.find((e) => {
+    if (e.boardId == boardId) {
+      return e;
+    }
+  });
+
+  obj.boardName = boardName;
+  obj.boardDesc = boardDesc;
+
+  setItemInLocalFn();
+}
+
+function handleDeleteFn(boardId) {
+  console.log(boardId);
+}
+
+function setItemInLocalFn() {
+  localStorage.setItem("kanban", JSON.stringify(state));
+}
+
+function generateRandomNumberFn() {
+  const rand = Math.floor(Math.random() * 10000 + 1);
+  return rand;
 }

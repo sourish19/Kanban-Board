@@ -12,3 +12,12 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
+
+.grid-background {
+  background-image: repeating-linear-gradient(
+      to right,
+      transparent 0 50px,
+      #fff1 50px 51px
+    ),
+    repeating-linear-gradient(to bottom, transparent 0 50px, #fff1 50px 51px);
+}
